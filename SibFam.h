@@ -40,17 +40,19 @@ public:
         _wife = wife;
         
         int husbH = _husb->high() + 5;
-        int wifeH = _wife->high() + 5;
+        int wifeH = _wife ? _wife->high() + 5 : 0;
         
         dispHusb = new Fl_Multiline_Output(x+3, y+3, FAM_WIDTH-6, husbH);
         dispHusb->color(clr);
-        dispPl  = new Fl_Box(x+5, y+56, 10, 20, "+");
-        dispWife = new Fl_Multiline_Output(x+18, y+husbH+6, FAM_WIDTH-21, wifeH);
-        dispWife->color(clr);
-        
         _husb->setup(dispHusb);
-        _wife->setup(dispWife);
         
+        if (_wife)
+        {
+            dispPl  = new Fl_Box(x+5, y+56, 10, 20, "+");
+            dispWife = new Fl_Multiline_Output(x+18, y+husbH+6, FAM_WIDTH-21, wifeH);
+            dispWife->color(clr);
+            _wife->setup(dispWife);
+        }        
         //end();
         
         childCount = 0;
