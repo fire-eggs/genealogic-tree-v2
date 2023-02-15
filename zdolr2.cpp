@@ -64,6 +64,8 @@ int main()
     Person sib1_c1("Random Harlan","?","",3);
         
     // ******************* Display widgets.
+    int H = window.h();
+    int W = window.w();
     
     GenWin gw(5, 5, window.w() - 10, window.h() - 10);
     
@@ -98,7 +100,9 @@ int main()
     famX += SibFam::FAM_WIDTH + 5;
     SibFam sFam2(&you, &youSp, FL_RED, famX, gen2Y);
 
-    // TODO resizable without impacting widgets
+    // TODO resizable while not moving GenWin
+    Fl_Box b(W, H, 1, 1);
+    window.resizable(b);
     
     window.end();
 	window.show();
