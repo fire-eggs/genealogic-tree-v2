@@ -27,8 +27,10 @@ private:
 public:
     static const int FAM_WIDTH = 160; // TODO should be determined dynamically
     
+    // TODO height should be determined dynamically
+    
     UncleFam(Person *unc, Person *aun, Fl_Color clr, int x, int y) 
-        : Fl_Group(x, y, FAM_WIDTH, 325)
+        : Fl_Group(x, y, FAM_WIDTH, 375)
     {
         box(FL_BORDER_BOX);
         
@@ -39,20 +41,17 @@ public:
         // TODO dimensions of output need to be determined by Person [taking generation and birth/death into account]
         
         int uncH = _unc->high();
-        int aunH = _aun ? _aun->high() : 0;
+        int aunH = _aun ? _aun->high() : 20;
         dispUnc = new Fl_Multiline_Output(x+3, y+3, FAM_WIDTH-6, uncH);
         dispUnc->color(clr);
         _unc->setup(dispUnc);
         
+        dispPl  = new Fl_Box(x+5, y+uncH+aunH/2, 10, 20, "+");
+        
+        dispAun = new Fl_Multiline_Output(x+18, y+uncH+10, FAM_WIDTH-21, aunH);
+        dispAun->color(clr);
         if (_aun)
-        {
-            dispPl  = new Fl_Box(x+5, y+5+uncH+aunH/2, 10, 20, "+");
-            
-            //dispAun = new Fl_Multiline_Output(x+18, y+46, FAM_WIDTH-21, 40);
-            dispAun = new Fl_Multiline_Output(x+18, y+uncH+10, FAM_WIDTH-21, aunH);
-            dispAun->color(clr);
             _aun->setup(dispAun);
-        }
         
         _famBottom = y+uncH+10+aunH;
                 
@@ -80,15 +79,13 @@ public:
         Fl_Multiline_Output *dispCousin = new Fl_Multiline_Output(x()+25, deltaY, FAM_WIDTH-28, cous->high());
         dispCousin->color(_clr);
         
+        // For no spouse, a short box is helpful as separator / indicator
+        int spH = spouse ? spouse->high() : 20;
         
-        Fl_Box *dispPl = new Fl_Box(x()+19, deltaY+cous->high()+12, 10, 20, "+");
+        Fl_Box *dispPl = new Fl_Box(x()+19, deltaY+cous->high() + spH / 2 - 4, 10, 20, "+");
         //deltaY += 35 + 3;
         deltaY += cous->high() + 6;
         
-        // TODO if no spouse, should spouse box just not be displayed?
-        int spH = 30;
-        if (spouse)
-            spH = spouse->high();
         //Fl_Multiline_Output *dispSpouse = new Fl_Multiline_Output(x()+25, y()+deltaY, FAM_WIDTH-28, 35);
         Fl_Multiline_Output *dispSpouse = new Fl_Multiline_Output(x()+30, deltaY, FAM_WIDTH-33, spH);
         dispSpouse->color(_clr);
