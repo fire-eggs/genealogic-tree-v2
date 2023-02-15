@@ -22,7 +22,9 @@ int main()
 {
 
 
-	Fl_Double_Window window(1000, 500, "Drzewo genealogiczne");
+    // TODO Scrollable 
+    
+	Fl_Double_Window window(1100, 600, "Drzewo genealogiczne");
 	window.color(FL_GRAY);
 
     // Maternal grandparents
@@ -62,14 +64,21 @@ int main()
     Person sib2("John Lawson","?","",2);
     
     Person sib1_c1("Random Harlan","?","",3);
-        
+
+    // Parents
+    Person dad("Daddy", "1.1.1950", "1.1.2000", 1);
+    Person mom("Mommy", "1.1.1950", "1.1.2000", 1);
+    
     // ******************* Display widgets.
+
     int H = window.h();
     int W = window.w();
     
-    GenWin gw(5, 5, window.w() - 10, window.h() - 10);
+    GenWin gw(5, 5, W - 10, H - 10);
     
     GrandFam gfam1(&gpa, &gma, FL_YELLOW, 5, 5);
+    GrandFam gfam2(&gpa, &gma, FL_YELLOW, 
+                   W - GrandFam::FAM_WIDTH - 5, 5);
     
     int gen1Y = 10 + gfam1.realH();
     int famX = 5;
@@ -88,18 +97,35 @@ int main()
     
 
     // Paternal sibling family.
-    int famX2 = famX + SibFam::FAM_WIDTH * 2 + 5; // TODO determined by number of gen2 siblings
+    int famX2 = famX + (SibFam::FAM_WIDTH+5) * 3; // TODO determined by number of gen2 siblings
     UncleFam ufamd1(&uncP1, &aunP1, FL_MAGENTA, famX2, gen1Y);
     ufamd1.AddCousin(&cousP1_1, nullptr);
     ufamd1.AddCousin(&cousP1_2, &spCousP1_2);
+
+    // Paternal sibling family 2.
+    famX2 += UncleFam::FAM_WIDTH + 5;
+    UncleFam ufamd2(&unc1, &aun1, FL_WHITE, famX2, gen1Y);
+    ufamd2.AddCousin(&cous1_1, &spCous1_2);
     
+    // a sibling of yours   
     int gen2Y = gen1Y + 50; 
     SibFam sFam1(&sib1, &sib1sp, FL_GREEN, famX, gen2Y);
     sFam1.AddChild(&sib1_c1, nullptr);
 
+    // you
     famX += SibFam::FAM_WIDTH + 5;
     SibFam sFam2(&you, &youSp, FL_RED, famX, gen2Y);
+    int youX = famX;
+    
+    // Another sibling of yours
+    famX += SibFam::FAM_WIDTH + 5;
+    SibFam sFam3(&sib1, nullptr, FL_MAGENTA, famX, gen2Y);
 
+    // Your parents
+    int parX = youX + SibFam::FAM_WIDTH / 2 - GrandFam::FAM_WIDTH / 2;
+    int parY = gen2Y - GrandFam::FAM_HIGH;
+    GrandFam parents(&dad, &mom, FL_GREEN, parX, parY);
+    
     // TODO resizable while not moving GenWin
     Fl_Box b(W, H, 1, 1);
     window.resizable(b);
