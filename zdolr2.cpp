@@ -38,7 +38,7 @@ int main()
     // Maternal cousins
     Person cous1_1("Sam Bare","14.09.1904","??.01.1986",2);
     Person cous1_2("Brucie Bare","??.??.1907","?",2);
-    Person spCous1_2("Dicey Lyall","?","?",2);
+    Person spCous1_2("Dicey Lyall","?","",2);
     Person cous1_3("Hillery Bare","11.03.1913","31.12.1996",2);
 
     // Maternal sibling - #2
@@ -67,7 +67,7 @@ int main()
 
     // Parents
     Person dad("Daddy", "1.1.1950", "1.1.2000", 1);
-    Person mom("Mommy", "1.1.1950", "1.1.2000", 1);
+    Person mom("Mommy", "1.1.1950", "", 1);
     
     // Paternal grandparents
     Person gpa2(gpa);

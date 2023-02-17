@@ -61,9 +61,9 @@ public:
     void position(int x, int y)
     {
         resize(x, y, w(), h());
-        dispSp1->resize(x+3, y+3, dispSp1->w(), dispSp2->h());
-        dispPl->resize(x+5, y+dispSp1->h()+dispSp2->h()/2, dispPl->w(), dispPl->h());
+        dispSp1->resize(x+3, y+3, dispSp1->w(), dispSp1->h());
         dispSp2->resize(x+18, y+_sp1->high()+10, dispSp2->w(), dispSp2->h());
+        dispPl->resize(x+5, y+_sp1->high()+dispSp2->h()/2, dispPl->w(), dispPl->h());
     }
 
 };
