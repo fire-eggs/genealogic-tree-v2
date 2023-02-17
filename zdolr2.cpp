@@ -69,16 +69,20 @@ int main()
     Person dad("Daddy", "1.1.1950", "1.1.2000", 1);
     Person mom("Mommy", "1.1.1950", "1.1.2000", 1);
     
+    // Paternal grandparents
+    Person gpa2(gpa);
+    Person gma2(gma);
+    
     // ******************* Display widgets.
 
     int H = window.h();
     int W = window.w();
     
-    GenWin gw(5, 5, W - 10, H - 10);
+    GenWin gw(2, 2, W - 4, H - 4);
     
     GrandFam gfam1(&gpa, &gma, FL_YELLOW, 5, 5);
-    GrandFam gfam2(&gpa, &gma, FL_YELLOW, 
-                   W - GrandFam::FAM_WIDTH - 5, 5);
+    GrandFam gfam2(&gpa, &gma, FL_YELLOW, W - 5, 5);
+    gfam2.position(W - gfam2.realW() - 5, 5);
     
     int gen1Y = 10 + gfam1.realH();
     int famX = 5;
@@ -122,9 +126,10 @@ int main()
     SibFam sFam3(&sib1, nullptr, FL_MAGENTA, famX, gen2Y);
 
     // Your parents
-    int parX = youX + SibFam::FAM_WIDTH / 2 - GrandFam::FAM_WIDTH / 2;
-    int parY = gen2Y - GrandFam::FAM_HIGH;
+    int parX = youX + SibFam::FAM_WIDTH / 2 - 100; //GrandFam::FAM_WIDTH / 2;
+    int parY = gen2Y - 50; // - GrandFam::FAM_HIGH;
     GrandFam parents(&dad, &mom, FL_GREEN, parX, parY);
+    parents.position(youX + SibFam::FAM_WIDTH / 2 - parents.realW() / 2, gen2Y - parents.realH() - 10);
     
     // TODO resizable while not moving GenWin
     Fl_Box b(W, H, 1, 1);
@@ -133,5 +138,4 @@ int main()
     window.end();
 	window.show();
 	return Fl::run();
-
 }

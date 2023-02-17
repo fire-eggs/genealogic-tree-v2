@@ -21,6 +21,14 @@ public:
         _gen = gen;
     }
 
+    Person(Person *orig)
+    {
+        _name = orig->_name;
+        _dob  = orig->_dob;
+        _dod  = orig->_dod;
+        _gen  = orig->_gen;
+    }
+    
     void fulltext( std::string& val)
     {
         val = _name + "\n ur. " + _dob;
@@ -62,6 +70,21 @@ public:
         test.size = textsize(); 
         test.measure(tw2, th2);
         return th2;
+    }
+    
+    int wide()
+    {
+        int tw2 = 0;
+        int th2 = 0;
+        Fl_Label test;
+        memset(&test, 0, sizeof(Fl_Label)); // make sure all fields cleared
+        std::string text;
+        fulltext(text);
+        test.value = text.c_str();
+        test.font = FL_HELVETICA;
+        test.size = textsize(); 
+        test.measure(tw2, th2);
+        return tw2 + 6; // TODO why is a tweak necessary? or in wrong place?
     }
     
 };
