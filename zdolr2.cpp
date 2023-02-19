@@ -4,9 +4,8 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Button.H>
 
-#include "GrandFam.h"
-#include "UncleFam.h"
-#include "SibFam.h"
+#include "NoChildFam.h"
+#include "ChildFam.h"
 
 class GenWin : public Fl_Box
 {
@@ -20,12 +19,9 @@ public:
 
 int main() 
 {
-
-
-    // TODO Scrollable 
     
-	Fl_Double_Window window(1100, 600, "Drzewo genealogiczne");
-	window.color(FL_GRAY);
+    Fl_Double_Window window(1100, 600, "Drzewo genealogiczne");
+    window.color(FL_GRAY);
 
     // Maternal grandparents
     Person gpa("Clarence Bauer","26.09.1926","28.12.1997",0);
@@ -80,61 +76,65 @@ int main()
     
     GenWin gw(2, 2, W - 4, H - 4);
     
-    GrandFam gfam1(&gpa, &gma, FL_YELLOW, 5, 5);
-    GrandFam gfam2(&gpa, &gma, FL_YELLOW, W - 5, 5);
+    NoChildFam gfam1(&gpa, &gma, FL_YELLOW, 5, 5);
+    NoChildFam gfam2(&gpa, &gma, FL_YELLOW, W - 5, 5);
     gfam2.position(W - gfam2.realW() - 5, 5);
     
     int gen1Y = 10 + gfam1.realH();
     int famX = 5;
     
-    // Maternal sibling family display 1.
-    UncleFam ufam1(&unc1, &aun1, FL_CYAN, famX, gen1Y);
-    famX += UncleFam::FAM_WIDTH + 5;
+    // Maternal-sibling family 1.
+    ChildFam ufam1(&unc1, &aun1, FL_CYAN, famX, gen1Y);
+    famX += ufam1.realW() + 5;
     
-    ufam1.AddCousin(&cous1_1, nullptr);
-    ufam1.AddCousin(&cous1_2, &spCous1_2);
-    ufam1.AddCousin(&cous1_3, nullptr);
+    ufam1.AddChild(&cous1_1, nullptr);
+    ufam1.AddChild(&cous1_2, &spCous1_2);
+    ufam1.AddChild(&cous1_3, nullptr);
     
-    // Maternal sibling family display 2.
-    UncleFam ufam2(&unc2, nullptr, FL_MAGENTA, famX , gen1Y);
-    famX += UncleFam::FAM_WIDTH + 5;
-    
+    // Maternal-sibling family display 2.
+    ChildFam ufam2(&unc2, nullptr, FL_MAGENTA, famX , gen1Y);
+    famX += ufam2.realW() + 5;
 
-    // Paternal sibling family.
-    int famX2 = famX + (SibFam::FAM_WIDTH+5) * 3; // TODO determined by number of gen2 siblings
-    UncleFam ufamd1(&uncP1, &aunP1, FL_MAGENTA, famX2, gen1Y);
-    ufamd1.AddCousin(&cousP1_1, nullptr);
-    ufamd1.AddCousin(&cousP1_2, &spCousP1_2);
-
-    // Paternal sibling family 2.
-    famX2 += UncleFam::FAM_WIDTH + 5;
-    UncleFam ufamd2(&unc1, &aun1, FL_WHITE, famX2, gen1Y);
-    ufamd2.AddCousin(&cous1_1, &spCous1_2);
-    
     // a sibling of yours   
     int gen2Y = gen1Y + 50; 
-    SibFam sFam1(&sib1, &sib1sp, FL_GREEN, famX, gen2Y);
+    ChildFam sFam1(&sib1, &sib1sp, FL_GREEN, famX, gen2Y);
     sFam1.AddChild(&sib1_c1, nullptr);
 
     // you
-    famX += SibFam::FAM_WIDTH + 5;
-    SibFam sFam2(&you, &youSp, FL_RED, famX, gen2Y);
+    famX += sFam1.realW() + 5;
+    ChildFam sFam2(&you, &youSp, FL_RED, famX, gen2Y);
     int youX = famX;
     
     // Another sibling of yours
-    famX += SibFam::FAM_WIDTH + 5;
-    SibFam sFam3(&sib1, nullptr, FL_MAGENTA, famX, gen2Y);
+    famX += sFam2.realW() + 5;
+    ChildFam sFam3(&sib1, nullptr, FL_MAGENTA, famX, gen2Y);
 
     // Your parents
-    int parX = youX + SibFam::FAM_WIDTH / 2 - 100; //GrandFam::FAM_WIDTH / 2;
+    int parX = youX + sFam2.realW() / 2 - 100; //GrandFam::FAM_WIDTH / 2;
     int parY = gen2Y - 50; // - GrandFam::FAM_HIGH;
-    GrandFam parents(&dad, &mom, FL_GREEN, parX, parY);
-    parents.position(youX + SibFam::FAM_WIDTH / 2 - parents.realW() / 2, gen2Y - parents.realH() - 10);
+    NoChildFam parents(&dad, &mom, FL_GREEN, parX, parY);
+    parents.position(youX + sFam2.realW() / 2 - parents.realW() / 2, gen2Y - parents.realH() - 10);
+
+    // Paternal siblings' X position determined by your and your siblings' sizes
     
+    // Paternal-sibling family 1.
+    int famX2 = famX + sFam3.realW() + 5;
+
+    ChildFam ufamd1(&uncP1, &aunP1, FL_MAGENTA, famX2, gen1Y);
+    ufamd1.AddChild(&cousP1_1, nullptr);
+    ufamd1.AddChild(&cousP1_2, &spCousP1_2);
+    famX2 += ufamd1.realW() + 5;
+    
+    // Paternal-sibling family 2.
+    ChildFam ufamd2(&unc1, &aun1, FL_WHITE, famX2, gen1Y);
+    ufamd2.AddChild(&cous1_1, &spCous1_2);
+
+    // TODO Scrollable
     // TODO resizable while not moving GenWin
+    
     Fl_Box b(W, H, 1, 1);
     window.resizable(b);
-    
+
     window.end();
 	window.show();
 	return Fl::run();

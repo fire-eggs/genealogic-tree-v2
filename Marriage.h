@@ -38,23 +38,24 @@ public:
         int sp1H = _sp1->high();
         int sp1W = _sp1->wide();
         int sp2H = _sp2 ? _sp2->high() : 20;
-        int sp2W = _sp2 ? _sp2->wide() : sp1W - 15;
+        int sp2W = _sp2 ? _sp2->wide() : sp1W - 12;
         
         dispSp1 = new Fl_Multiline_Output(x+3, y+3, sp1W, sp1H);
+        _sp1->setup(dispSp1);
         dispSp1->color(clr);
-        dispPl = new Fl_Box(x+5, y+sp1H+sp2H / 2, 10, 20, "+");
-        dispSp2 = new Fl_Multiline_Output(x+18, y+sp1H+10, sp2W, sp2H);
-        dispSp2->color(clr);
-        
         dispSp1->clear_visible_focus();
+        
+        dispPl = new Fl_Box(x+5, y+sp1H+sp2H / 2, 7, 20, "+");
+
+        dispSp2 = new Fl_Multiline_Output(x+15, y+sp1H+10, sp2W, sp2H);
+        dispSp2->color(clr);
         dispSp2->clear_visible_focus();
         
-        _sp1->setup(dispSp1);
         if (_sp2)
             _sp2->setup(dispSp2);
 
-        _realW = max(18 + sp2W + 3, sp1W+5);
-        _realH = sp1H + sp2H + 18;
+        _realW = max(20 + sp2W, sp1W+5);
+        _realH = sp1H + sp2H + (_sp2 ? 17 : 11); // TODO why is a tweak required for an empty Fl_Multiline_Output?
         resize(x, y, _realW, _realH);
     }
 
