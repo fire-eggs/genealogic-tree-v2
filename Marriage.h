@@ -46,11 +46,14 @@ public:
         dispSp2 = new Fl_Multiline_Output(x+18, y+sp1H+10, sp2W, sp2H);
         dispSp2->color(clr);
         
+        dispSp1->clear_visible_focus();
+        dispSp2->clear_visible_focus();
+        
         _sp1->setup(dispSp1);
         if (_sp2)
             _sp2->setup(dispSp2);
 
-        _realW = 18 + sp2W + 3; // TODO: assumes spouse2 is wide
+        _realW = max(18 + sp2W + 3, sp1W+5);
         _realH = sp1H + sp2H + 18;
         resize(x, y, _realW, _realH);
     }
@@ -65,6 +68,8 @@ public:
         dispSp2->resize(x+18, y+_sp1->high()+10, dispSp2->w(), dispSp2->h());
         dispPl->resize(x+5, y+_sp1->high()+dispSp2->h()/2, dispPl->w(), dispPl->h());
     }
+
+    static int max(int a, int b) { return a > b ? a : b; }
 
 };
 
